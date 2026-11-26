@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Tester</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #000000; }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen sm:py-8">
+
+    <!-- Main Mobile Container -->
+    <div id="receipt-container" class="w-full max-w-md bg-[#0a0a0a] text-white relative sm:rounded-[2.5rem] sm:border sm:border-gray-800 sm:shadow-2xl overflow-hidden pb-6 flex flex-col pt-4">
+        
+        <!-- Top Bar -->
+        <div class="flex justify-between items-center px-4 py-2 mb-6">
+            <button class="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-red-500 hover:bg-[#2a2a2a] transition">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L13 13M1 13L13 1" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            
+            <button onclick="toggleEdit()" class="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] rounded-xl text-xs font-medium text-gray-300 hover:bg-[#2a2a2a] transition">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                Share Details
+            </button>
+        </div>
+
+        <!-- THE FLOATING RECEIPT CARD WRAPPER -->
+        <div class="mx-4 mt-8 relative z-10">
+            
+            <!-- FLOATING EMOJI/ICON -->
+            <div class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 flex items-center justify-center z-20">
+                <div class="absolute inset-0 bg-gradient-to-br from-[#00A8FF] to-[#00D26A] rounded-full"></div>
+                <div class="absolute inset-[2.5px] bg-[#161616] rounded-full flex items-center justify-center overflow-hidden">
+                    <span class="text-[80px] leading-none drop-shadow-xl translate-y-1">🎉</span>
+                </div>
+            </div>
+
+            <!-- The exact dark card -->
+            <div class="bg-[#161616] rounded-3xl pt-20 pb-6 px-4 relative overflow-hidden shadow-lg border border-gray-800/50">
+                
+                <!-- THE CLEAN TOP GRADIENT LINE -->
+                <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00A8FF] to-[#00D26A]"></div>
+
+                <!-- Success Text & Date -->
+                <div class="text-center mb-6">
+                    <h1 class="text-[20px] font-medium leading-tight text-gray-100 mb-2">
+                        Your transaction was<br>successful
+                    </h1>
+                    <p id="text-date" class="text-[12px] text-gray-400">16th Nov 2026 | 9:59 pm</p>
+                    <input id="input-date" type="text" class="hidden w-full max-w-[200px] bg-[#2A2A2A] border border-gray-600 rounded-lg px-3 py-1 text-white text-sm text-center mt-2 focus:outline-none focus:border-green-500">
+                </div>
+
+                <!-- EDIT MODE: TRANSACTION TYPE TOGGLE -->
+                <div id="transaction-type-container" class="hidden mb-6 bg-[#1a1a1a] p-1 rounded-full flex">
+                    <button id="btn-send-money" onclick="setTransactionType('send_money')" class="flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all bg-[#22c55e] text-white shadow-sm">
+                        Send Money
+                    </button>
+                    <button id="btn-pochi" onclick="setTransactionType('pochi')" class="flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all text-gray-400 hover:text-gray-200">
+                        Pochi la Biashara
+                    </button>
+                </div>
+
+                <!-- Amount & Cost -->
+                <div class="text-center mb-6 flex flex-col items-center">
+                    <h2 id="text-amount" class="text-[32px] font-bold mb-1 text-white">Ksh 1.00</h2>
+                    <input id="input-amount" type="number" oninput="calculateFee()" class="hidden w-1/2 bg-[#2A2A2A] border border-gray-600 rounded-lg px-3 py-1 text-white text-center font-bold text-xl mb-1 focus:outline-none focus:border-green-500">
+
+                    <p id="text-cost" class="text-[12px] text-gray-400 mb-2">Transaction cost: Ksh 0.00</p>
+                    <!-- Read-only input for the bot -->
+                    <input id="input-cost" type="text" readonly class="hidden w-1/3 bg-[#1a1a1a] border border-gray-700 rounded-lg px-3 py-1 text-gray-400 text-xs text-center mb-2 focus:outline-none">
+                    
+                    <!-- ID -->
+                    <div class="flex items-center justify-center gap-2 text-[13px] text-[#22c55e] font-medium mt-1">
+                        <span id="text-id">ID: UKGPI2A7LH</span>
+                        <input id="input-id" type="text" class="hidden w-[120px] bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-center font-mono text-sm focus:outline-none focus:border-green-500">
+                        <button class="hover:text-green-400 p-1" onclick="copyId()">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- INNER "SEND TO" CARD -->
+                <div class="bg-[#212121] rounded-2xl p-4">
+                    <p class="text-[11px] text-gray-400 mb-3">Send to:</p>
+                    <div class="flex items-center gap-3">
+                        
+                        <!-- Avatar (Image or Initials) -->
+                        <div class="w-11 h-11 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 border border-gray-600 flex items-center justify-center">
+                            <img id="avatar-img" src="" crossorigin="anonymous" alt="avatar" class="w-full h-full object-cover hidden">
+                            <span id="avatar-initials" class="text-sm font-bold text-gray-300">RG</span>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <!-- NAME -->
+                            <p id="text-name" class="font-medium text-[14px] mb-0.5 text-gray-100">REUBEN GACHUKIA</p>
+                            <input id="input-name" type="text" class="hidden w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-sm font-medium mb-1 focus:outline-none focus:border-green-500">
+                            
+                            <!-- PHONE -->
+                            <p id="text-phone" class="text-[11px] text-gray-400">Phone number: 0797687294</p>
+                            <input id="input-phone" type="text" class="hidden w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-xs mt-1 focus:outline-none focus:border-green-500">
+
+                            <!-- AVATAR URL INPUT -->
+                            <div id="avatar-input-container" class="hidden mt-2">
+                                <input id="input-avatar" type="text" placeholder="Paste Image URL (or leave blank for initials)" class="w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-gray-300 text-[10px] focus:outline-none focus:border-green-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF FLOATING CARD -->
+
+        <!-- Auto Invest Section -->
+        <div class="mx-4 mt-6 border border-dashed border-[#1f3f2c] bg-[#0f1a14] rounded-2xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#22c55e] rounded-full flex items-center justify-center font-bold text-black text-[13px] italic">
+                    ZiiDi
+                </div>
+                <p class="text-[12px] text-gray-300 w-40 leading-tight">Auto invest with ZiiDi's <span class="text-white font-medium">Invest</span> as you spend</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#22c55e]"></div>
+            </label>
+        </div>
+
+        <!-- Action Grid -->
+        <div class="grid grid-cols-4 gap-2 mx-4 mt-6">
+            <div class="flex flex-col items-center gap-2 cursor-pointer group">
+                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </div>
+                <p class="text-[10px] text-gray-400 text-center leading-tight">Add to<br>favourites</p>
+            </div>
+            <div class="flex flex-col items-center gap-2 cursor-pointer group">
+                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                </div>
+                <p class="text-[10px] text-gray-400 text-center leading-tight">Reverse<br>transaction</p>
+            </div>
+            <div class="flex flex-col items-center gap-2 cursor-pointer group">
+                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+                <p class="text-[10px] text-gray-400 text-center leading-tight">Schedule<br>payment</p>
+            </div>
+            <div id="downloadBtn" onclick="downloadReceipt()" class="flex flex-col items-center gap-2 cursor-pointer group">
+                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </div>
+                <p id="downloadText" class="text-[10px] text-gray-400 text-center leading-tight">Download<br>receipt</p>
+            </div>
+        </div>
+
+        <!-- Done / Save Button -->
+        <div class="px-4 mt-6 mb-2">
+            <button id="mainActionBtn" onclick="handleMainAction()" class="w-full bg-[#22c55e] text-white font-medium py-3.5 rounded-xl hover:bg-green-500 transition-colors">
+                Done
+            </button>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="w-32 h-1 bg-gray-600 rounded-full mx-auto mt-2"></div>
+    </div>
+
+    <!-- EVERYTHING IN ONE SCRIPT TAG -->
+    <script>
+        let isEditing = false;
+        let currentTransactionType = 'send_money';
+
+        function calculateFee() {
+            const amountInput = document.getElementById('input-amount');
+            const costInput = document.getElementById('input-cost');
+            
+            let amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount < 0) amount = 0;
+
+            let fee = 0;
+
+            if (currentTransactionType === 'pochi') {
+                if (amount <= 100) fee = 0;
+                else if (amount <= 500) fee = 3;
+                else if (amount <= 1000) fee = 7;
+                else if (amount <= 1500) fee = 10;
+                else if (amount <= 2500) fee = 15;
+                else if (amount <= 3500) fee = 20;
+                else if (amount <= 5000) fee = 25;
+                else if (amount <= 7500) fee = 35;
+                else if (amount <= 10000) fee = 40;
+                else if (amount <= 15000) fee = 55;
+                else if (amount <= 20000) fee = 60;
+                else if (amount <= 25000) fee = 75;
+                else if (amount <= 30000) fee = 85;
+                else if (amount <= 35000) fee = 95;
+                else if (amount <= 40000) fee = 105;
+                else if (amount <= 45000) fee = 115;
+                else if (amount <= 50000) fee = 125;
+                else fee = 0; 
+            } else {
+                if (amount <= 100) fee = 0;
+                else if (amount <= 500) fee = 11;
+                else if (amount <= 1000) fee = 15;
+                else if (amount <= 1500) fee = 25;
+                else if (amount <= 2500) fee = 35;
+                else if (amount <= 3500) fee = 50;
+                else if (amount <= 5000) fee = 60;
+                else if (amount <= 7500) fee = 75;
+                else if (amount <= 10000) fee = 90;
+                else if (amount <= 15000) fee = 105;
+                else if (amount <= 20000) fee = 120;
+                else if (amount <= 25000) fee = 135;
+                else if (amount <= 30000) fee = 155;
+                else if (amount <= 35000) fee = 170;
+                else if (amount <= 40000) fee = 185;
+                else if (amount <= 45000) fee = 195;
+                else if (amount <= 50000) fee = 205;
+                else fee = 0; 
+            }
+
+            costInput.value = fee.toFixed(2);
+        }
+
+        function setTransactionType(type) {
+            currentTransactionType = type;
+            const btnSend = document.getElementById('btn-send-money');
+            const btnPochi = document.getElementById('btn-pochi');
+
+            if (type === 'send_money') {
+                btnSend.className = "flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all bg-[#22c55e] text-white shadow-sm";
+                btnPochi.className = "flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all text-gray-400 hover:text-gray-200";
+            } else {
+                btnPochi.className = "flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all bg-[#22c55e] text-white shadow-sm";
+                btnSend.className = "flex-1 py-2.5 text-[12px] font-medium rounded-full transition-all text-gray-400 hover:text-gray-200";
+            }
+
+            if (isEditing) {
+                calculateFee();
+            }
+        }
+
+        function getInitials(name) {
+            if (!name) return "?";
+            const parts = name.trim().split(" ");
+            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        function updateAvatarUI(name, imageUrl) {
+            const imgElement = document.getElementById('avatar-img');
+            const initialsElement = document.getElementById('avatar-initials');
+
+            if (imageUrl && imageUrl.trim() !== "") {
+                imgElement.src = imageUrl;
+                imgElement.classList.remove('hidden');
+                initialsElement.classList.add('hidden');
+            } else {
+                imgElement.classList.add('hidden');
+                initialsElement.classList.remove('hidden');
+                initialsElement.innerText = getInitials(name);
+            }
+        }
+
+        window.onload = function() {
+            const savedData = localStorage.getItem('receiptData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('text-date').innerText = data.date;
+                document.getElementById('text-amount').innerText = "Ksh " + data.amount;
+                document.getElementById('text-cost').innerText = "Transaction cost: Ksh " + data.cost;
+                document.getElementById('text-id').innerText = "ID: " + data.id;
+                document.getElementById('text-name').innerText = data.name;
+                document.getElementById('text-phone').innerText = "Phone number: " + data.phone;
+
+                if (data.type) {
+                    currentTransactionType = data.type;
+                    setTransactionType(data.type);
+                }
+                updateAvatarUI(data.name, data.avatar);
+            } else {
+                updateAvatarUI("REUBEN GACHUKIA", "");
+            }
+        };
+
+        function toggleEdit() {
+            isEditing = !isEditing;
+            const textElements = ['text-date', 'text-amount', 'text-cost', 'text-id', 'text-name', 'text-phone'];
+            const inputElements = ['input-date', 'input-amount', 'input-cost', 'input-id', 'input-name', 'input-phone'];
+            const mainBtn = document.getElementById('mainActionBtn');
+            const avatarInputContainer = document.getElementById('avatar-input-container');
+            const typeContainer = document.getElementById('transaction-type-container');
+
+            if (isEditing) {
+                mainBtn.innerText = "Save Changes";
+                mainBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+                mainBtn.classList.remove('bg-[#22c55e]', 'hover:bg-green-500');
+                
+                document.getElementById('input-date').value = document.getElementById('text-date').innerText;
+                document.getElementById('input-amount').value = document.getElementById('text-amount').innerText.replace('Ksh ', '');
+                document.getElementById('input-cost').value = document.getElementById('text-cost').innerText.replace('Transaction cost: Ksh ', '');
+                document.getElementById('input-id').value = document.getElementById('text-id').innerText.replace('ID: ', '');
+                document.getElementById('input-name').value = document.getElementById('text-name').innerText;
+                document.getElementById('input-phone').value = document.getElementById('text-phone').innerText.replace('Phone number: ', '');
+                
+                avatarInputContainer.classList.remove('hidden');
+                typeContainer.classList.remove('hidden');
+
+                textElements.forEach(id => document.getElementById(id).classList.add('hidden'));
+                inputElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
+            } else {
+                mainBtn.innerText = "Done";
+                mainBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                mainBtn.classList.add('bg-[#22c55e]', 'hover:bg-green-500');
+
+                const newData = {
+                    date: document.getElementById('input-date').value,
+                    amount: document.getElementById('input-amount').value,
+                    cost: document.getElementById('input-cost').value,
+                    id: document.getElementById('input-id').value,
+                    name: document.getElementById('input-name').value,
+                    phone: document.getElementById('input-phone').value,
+                    avatar: document.getElementById('input-avatar').value,
+                    type: currentTransactionType
+                };
+
+                document.getElementById('text-date').innerText = newData.date;
+                document.getElementById('text-amount').innerText = "Ksh " + newData.amount;
+                document.getElementById('text-cost').innerText = "Transaction cost: Ksh " + newData.cost;
+                document.getElementById('text-id').innerText = "ID: " + newData.id;
+                document.getElementById('text-name').innerText = newData.name;
+                document.getElementById('text-phone').innerText = "Phone number: " + newData.phone;
+
+                updateAvatarUI(newData.name, newData.avatar);
+                localStorage.setItem('receiptData', JSON.stringify(newData));
+
+                avatarInputContainer.classList.add('hidden');
+                typeContainer.classList.add('hidden');
+                inputElements.forEach(id => document.getElementById(id).classList.add('hidden'));
+                textElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
+            }
+        }
+
+        function handleMainAction() {
+            if (isEditing) {
+                toggleEdit(); 
+            } else {
+                alert("Transaction completed! (You can redirect the user to the home page here)");
+            }
+        }
+
+        function copyId() {
+            const idText = document.getElementById('input-id').value;
+            navigator.clipboard.writeText(idText);
+            const originalText = document.querySelector('#text-id').innerText;
+            document.querySelector('#text-id').innerText = "Copied!";
+            setTimeout(() => {
+                document.querySelector('#text-id').innerText = originalText;
+            }, 1500);
+        }
+
+        function downloadReceipt() {
+            if (isEditing) {
+                toggleEdit(); 
+            }
+            const receiptElement = document.getElementById('receipt-container');
+            const downloadText = document.getElementById('downloadText');
+            downloadText.innerHTML = "Loading...";
+
+            html2canvas(receiptElement, {
+                backgroundColor: '#0a0a0a', 
+                scale: 2, 
+                useCORS: true, 
+                logging: false
+            }).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `receipt-${document.getElementById('input-id').value}.png`;
+                link.href = image;
+                link.click();
+                downloadText.innerHTML = "Download<br>receipt";
+            }).catch(err => {
+                console.error("Error capturing receipt:", err);
+                alert("Failed to download the receipt.");
+                downloadText.innerHTML = "Download<br>receipt";
+            });
+        }
+    </script>
+</body>
+</html>
