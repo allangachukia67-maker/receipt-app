@@ -45,15 +45,9 @@
         <!-- THE FLOATING RECEIPT CARD WRAPPER -->
         <div class="mx-4 mt-8 relative z-10">
             
-            <!-- FLOATING EMOJI WITH GRADIENT RING (From first screenshot) -->
-            <div class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 flex items-center justify-center z-20">
-                <!-- The Blue/Green Ring -->
-                <div class="absolute inset-0 bg-gradient-to-br from-[#00A8FF] to-[#00D26A] rounded-full"></div>
-                <!-- The Dark Inner Circle -->
-                <div class="absolute inset-[2.5px] bg-[#1c1c1c] rounded-full flex items-center justify-center overflow-hidden">
-                    <!-- The HUGE Emoji -->
-                    <span class="text-[85px] leading-none drop-shadow-xl translate-y-1">🎉</span>
-                </div>
+            <!-- FLOATING EMOJI (No circle, no ring, just floating) -->
+            <div class="absolute -top-16 left-1/2 -translate-x-1/2 z-20">
+                <span class="text-[95px] leading-none drop-shadow-[0_10px_15px_rgba(0,0,0,0.9)] block">🎉</span>
             </div>
 
             <!-- The exact dark card -->
@@ -91,7 +85,7 @@
                     
                     <input id="input-cost" type="text" readonly class="hidden w-1/2 bg-[#1a1a1a] border border-gray-700 rounded-lg px-3 py-1 text-gray-400 text-sm text-center mb-3 focus:outline-none">
                     
-                    <!-- ID PILL (From second screenshot) -->
+                    <!-- ID PILL -->
                     <div class="flex items-center justify-center gap-2">
                         <div id="text-id-container" class="bg-[#2A2A2A] rounded-lg px-3 py-1.5 flex items-center gap-2">
                             <span id="text-id" class="text-[13px] text-[#22c55e] font-medium font-mono">ID: UK28E0JZVG</span>
@@ -134,22 +128,20 @@
         </div>
         <!-- END OF FLOATING CARD -->
 
-        <!-- ZiiDi Section (With Edit Settings button) -->
+        <!-- ZiiDi Section -->
         <div class="mx-4 mt-6 border border-dashed border-[#1f3f2c] bg-[#122018] rounded-2xl p-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- White ZiiDi Logo -->
                 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-bold text-[#22c55e] text-[12px] italic shadow-sm">
                     ZiiDi
                 </div>
                 <p class="text-[13px] text-gray-300">ZiiDi Autoinvest is <span class="text-white font-medium">active</span></p>
             </div>
-            <!-- Edit Settings Button -->
             <button onclick="alert('Edit Settings clicked')" class="bg-[#22c55e] text-black text-[12px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-400 transition">
                 Edit Settings
             </button>
         </div>
 
-        <!-- Action Grid (Matching the second screenshot order and colors) -->
+        <!-- Action Grid -->
         <div class="grid grid-cols-4 gap-2 mx-4 mt-8">
             <!-- 1. Favourites -->
             <div class="flex flex-col items-center gap-2 cursor-pointer group">
@@ -335,7 +327,7 @@
                 
                 avatarInputContainer.classList.remove('hidden');
                 typeContainer.classList.remove('hidden');
-                idContainer.classList.add('hidden'); // Hide the green pill ID
+                idContainer.classList.add('hidden'); 
 
                 textElements.forEach(id => document.getElementById(id).classList.add('hidden'));
                 inputElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
@@ -367,7 +359,7 @@
 
                 avatarInputContainer.classList.add('hidden');
                 typeContainer.classList.add('hidden');
-                idContainer.classList.remove('hidden'); // Show the green pill ID again
+                idContainer.classList.remove('hidden'); 
                 inputElements.forEach(id => document.getElementById(id).classList.add('hidden'));
                 textElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
             }
