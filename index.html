@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Receipt Tester</title>
     
-    <!-- THESE TAGS REMOVE THE SAFARI SEARCH BAR -->
+    <!-- TAGS TO REMOVE SAFARI SEARCH BAR -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #000000; }
+        body { font-family: 'Inter', sans-serif; background-color: #0d0d0d; }
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -26,12 +26,12 @@
 <body class="flex justify-center min-h-screen sm:py-8">
 
     <!-- Main Mobile Container -->
-    <div id="receipt-container" class="w-full max-w-md bg-[#0a0a0a] text-white relative sm:rounded-[2.5rem] sm:border sm:border-gray-800 sm:shadow-2xl overflow-hidden pb-6 flex flex-col pt-4">
+    <div id="receipt-container" class="w-full max-w-md bg-[#0d0d0d] text-white relative sm:rounded-[2.5rem] sm:border sm:border-gray-800 sm:shadow-2xl overflow-hidden pb-6 flex flex-col pt-4">
         
         <!-- Top Bar -->
         <div class="flex justify-between items-center px-4 py-2 mb-6">
-            <button class="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-red-500 hover:bg-[#2a2a2a] transition">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center hover:bg-[#2a2a2a] transition">
+                <svg width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L13 13M1 13L13 1" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
@@ -45,26 +45,29 @@
         <!-- THE FLOATING RECEIPT CARD WRAPPER -->
         <div class="mx-4 mt-8 relative z-10">
             
-            <!-- FLOATING EMOJI/ICON -->
+            <!-- FLOATING EMOJI WITH GRADIENT RING (From first screenshot) -->
             <div class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 flex items-center justify-center z-20">
+                <!-- The Blue/Green Ring -->
                 <div class="absolute inset-0 bg-gradient-to-br from-[#00A8FF] to-[#00D26A] rounded-full"></div>
-                <div class="absolute inset-[2.5px] bg-[#161616] rounded-full flex items-center justify-center overflow-hidden">
-                    <span class="text-[80px] leading-none drop-shadow-xl translate-y-1">🎉</span>
+                <!-- The Dark Inner Circle -->
+                <div class="absolute inset-[2.5px] bg-[#1c1c1c] rounded-full flex items-center justify-center overflow-hidden">
+                    <!-- The HUGE Emoji -->
+                    <span class="text-[85px] leading-none drop-shadow-xl translate-y-1">🎉</span>
                 </div>
             </div>
 
             <!-- The exact dark card -->
-            <div class="bg-[#161616] rounded-3xl pt-20 pb-6 px-4 relative overflow-hidden shadow-lg border border-gray-800/50">
+            <div class="bg-[#1c1c1c] rounded-3xl pt-20 pb-6 px-4 relative overflow-hidden shadow-lg border border-gray-800/50">
                 
                 <!-- THE CLEAN TOP GRADIENT LINE -->
                 <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00A8FF] to-[#00D26A]"></div>
 
                 <!-- Success Text & Date -->
-                <div class="text-center mb-6">
-                    <h1 class="text-[20px] font-medium leading-tight text-gray-100 mb-2">
+                <div class="text-center mb-6 mt-2">
+                    <h1 class="text-[22px] font-medium leading-tight text-gray-100 mb-2">
                         Your transaction was<br>successful
                     </h1>
-                    <p id="text-date" class="text-[12px] text-gray-400">16th Nov 2026 | 9:59 pm</p>
+                    <p id="text-date" class="text-[14px] text-gray-400">2nd Nov 2026 | 11:09AM</p>
                     <input id="input-date" type="text" class="hidden w-full max-w-[200px] bg-[#2A2A2A] border border-gray-600 rounded-lg px-3 py-1 text-white text-sm text-center mt-2 focus:outline-none focus:border-green-500">
                 </div>
 
@@ -80,48 +83,49 @@
 
                 <!-- Amount & Cost -->
                 <div class="text-center mb-6 flex flex-col items-center">
-                    <h2 id="text-amount" class="text-[32px] font-bold mb-1 text-white">Ksh 1.00</h2>
+                    <h2 id="text-amount" class="text-[34px] font-bold mb-1 text-white">Ksh 2.00</h2>
                     
-                    <!-- UPDATED: Made the amount input larger (text-[32px] w-2/3 py-2) -->
-                    <input id="input-amount" type="number" oninput="calculateFee()" class="hidden w-2/3 bg-[#2A2A2A] border border-gray-600 rounded-lg px-3 py-2 text-white text-center font-bold text-[32px] mb-1 focus:outline-none focus:border-green-500">
+                    <input id="input-amount" type="number" oninput="calculateFee()" class="hidden w-2/3 bg-[#2A2A2A] border border-gray-600 rounded-lg px-3 py-2 text-white text-center font-bold text-[34px] mb-1 focus:outline-none focus:border-green-500">
 
-                    <p id="text-cost" class="text-[12px] text-gray-400 mb-2">Transaction cost: Ksh 0.00</p>
-                    <!-- Read-only input for the bot -->
-                    <input id="input-cost" type="text" readonly class="hidden w-1/2 bg-[#1a1a1a] border border-gray-700 rounded-lg px-3 py-1 text-gray-400 text-sm text-center mb-2 focus:outline-none">
+                    <p id="text-cost" class="text-[14px] text-gray-400 mb-3">Transaction cost: Ksh 0.00</p>
                     
-                    <!-- ID -->
-                    <div class="flex items-center justify-center gap-2 text-[13px] text-[#22c55e] font-medium mt-1">
-                        <span id="text-id">ID: UKGPI2A7LH</span>
-                        <input id="input-id" type="text" class="hidden w-[120px] bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-center font-mono text-sm focus:outline-none focus:border-green-500">
-                        <button class="hover:text-green-400 p-1" onclick="copyId()">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        </button>
+                    <input id="input-cost" type="text" readonly class="hidden w-1/2 bg-[#1a1a1a] border border-gray-700 rounded-lg px-3 py-1 text-gray-400 text-sm text-center mb-3 focus:outline-none">
+                    
+                    <!-- ID PILL (From second screenshot) -->
+                    <div class="flex items-center justify-center gap-2">
+                        <div id="text-id-container" class="bg-[#2A2A2A] rounded-lg px-3 py-1.5 flex items-center gap-2">
+                            <span id="text-id" class="text-[13px] text-[#22c55e] font-medium font-mono">ID: UK28E0JZVG</span>
+                            <button class="text-[#22c55e] hover:text-green-400 p-0.5" onclick="copyId()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                        <input id="input-id" type="text" class="hidden w-[150px] bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-center font-mono text-sm focus:outline-none focus:border-green-500">
                     </div>
                 </div>
 
-                <!-- INNER "SEND TO" CARD -->
-                <div class="bg-[#212121] rounded-2xl p-4">
-                    <p class="text-[11px] text-gray-400 mb-3">Send to:</p>
+                <!-- INNER "SENT TO" CARD -->
+                <div class="bg-[#2A2A2A] rounded-2xl p-4">
+                    <p class="text-[13px] text-gray-400 mb-3">Sent to:</p>
                     <div class="flex items-center gap-3">
                         
-                        <!-- Avatar (Image or Initials) -->
-                        <div class="w-11 h-11 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 border border-gray-600 flex items-center justify-center">
+                        <!-- Avatar (Green Initials) -->
+                        <div class="w-12 h-12 rounded-full bg-[#1F3A2A] overflow-hidden shrink-0 flex items-center justify-center">
                             <img id="avatar-img" src="" crossorigin="anonymous" alt="avatar" class="w-full h-full object-cover hidden">
-                            <span id="avatar-initials" class="text-sm font-bold text-gray-300">RG</span>
+                            <span id="avatar-initials" class="text-[15px] font-bold text-[#22c55e]">AK</span>
                         </div>
                         
                         <div class="flex-1">
                             <!-- NAME -->
-                            <p id="text-name" class="font-medium text-[14px] mb-0.5 text-gray-100">REUBEN GACHUKIA</p>
-                            <input id="input-name" type="text" class="hidden w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-sm font-medium mb-1 focus:outline-none focus:border-green-500">
+                            <p id="text-name" class="font-medium text-[16px] mb-0.5 text-white">Allan Kungu</p>
+                            <input id="input-name" type="text" class="hidden w-full bg-[#1c1c1c] border border-gray-600 rounded-lg px-2 py-1 text-white text-sm font-medium mb-1 focus:outline-none focus:border-green-500">
                             
                             <!-- PHONE -->
-                            <p id="text-phone" class="text-[11px] text-gray-400">Phone number: 0797687294</p>
-                            <input id="input-phone" type="text" class="hidden w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-white text-xs mt-1 focus:outline-none focus:border-green-500">
+                            <p id="text-phone" class="text-[13px] text-gray-400">Phone number: 0180182073</p>
+                            <input id="input-phone" type="text" class="hidden w-full bg-[#1c1c1c] border border-gray-600 rounded-lg px-2 py-1 text-white text-xs mt-1 focus:outline-none focus:border-green-500">
 
                             <!-- AVATAR URL INPUT -->
                             <div id="avatar-input-container" class="hidden mt-2">
-                                <input id="input-avatar" type="text" placeholder="Paste Image URL (or leave blank for initials)" class="w-full bg-[#2A2A2A] border border-gray-600 rounded-lg px-2 py-1 text-gray-300 text-[10px] focus:outline-none focus:border-green-500">
+                                <input id="input-avatar" type="text" placeholder="Image URL (optional)" class="w-full bg-[#1c1c1c] border border-gray-600 rounded-lg px-2 py-1 text-gray-300 text-[10px] focus:outline-none focus:border-green-500">
                             </div>
                         </div>
                     </div>
@@ -130,51 +134,59 @@
         </div>
         <!-- END OF FLOATING CARD -->
 
-        <!-- Auto Invest Section -->
-        <div class="mx-4 mt-6 border border-dashed border-[#1f3f2c] bg-[#0f1a14] rounded-2xl p-4 flex items-center justify-between">
+        <!-- ZiiDi Section (With Edit Settings button) -->
+        <div class="mx-4 mt-6 border border-dashed border-[#1f3f2c] bg-[#122018] rounded-2xl p-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#22c55e] rounded-full flex items-center justify-center font-bold text-black text-[13px] italic">
+                <!-- White ZiiDi Logo -->
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-bold text-[#22c55e] text-[12px] italic shadow-sm">
                     ZiiDi
                 </div>
-                <p class="text-[12px] text-gray-300 w-40 leading-tight">Auto invest with ZiiDi's <span class="text-white font-medium">Invest</span> as you spend</p>
+                <p class="text-[13px] text-gray-300">ZiiDi Autoinvest is <span class="text-white font-medium">active</span></p>
             </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer">
-                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#22c55e]"></div>
-            </label>
+            <!-- Edit Settings Button -->
+            <button onclick="alert('Edit Settings clicked')" class="bg-[#22c55e] text-black text-[12px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-400 transition">
+                Edit Settings
+            </button>
         </div>
 
-        <!-- Action Grid -->
-        <div class="grid grid-cols-4 gap-2 mx-4 mt-6">
+        <!-- Action Grid (Matching the second screenshot order and colors) -->
+        <div class="grid grid-cols-4 gap-2 mx-4 mt-8">
+            <!-- 1. Favourites -->
             <div class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <div class="w-[50px] h-[50px] rounded-full bg-[#1c1c1c] flex items-center justify-center text-[#22c55e] transition group-hover:scale-105">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </div>
-                <p class="text-[10px] text-gray-400 text-center leading-tight">Add to<br>favourites</p>
+                <p class="text-[11px] text-gray-300 text-center leading-tight">Add to<br>favourites</p>
             </div>
+            
+            <!-- 2. Schedule -->
             <div class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                <div class="w-[50px] h-[50px] rounded-full bg-[#1c1c1c] flex items-center justify-center text-[#22c55e] transition group-hover:scale-105">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 </div>
-                <p class="text-[10px] text-gray-400 text-center leading-tight">Reverse<br>transaction</p>
+                <p class="text-[11px] text-gray-300 text-center leading-tight">Schedule<br>Payment</p>
             </div>
-            <div class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                </div>
-                <p class="text-[10px] text-gray-400 text-center leading-tight">Schedule<br>payment</p>
-            </div>
+
+            <!-- 3. Download -->
             <div id="downloadBtn" onclick="downloadReceipt()" class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-[52px] h-[52px] rounded-full border border-gray-800 bg-[#161616] flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-500/50 transition">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <div class="w-[50px] h-[50px] rounded-full bg-[#1c1c1c] flex items-center justify-center text-[#22c55e] transition group-hover:scale-105">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 </div>
-                <p id="downloadText" class="text-[10px] text-gray-400 text-center leading-tight">Download<br>receipt</p>
+                <p id="downloadText" class="text-[11px] text-gray-300 text-center leading-tight">Download<br>receipt</p>
+            </div>
+
+            <!-- 4. Reverse -->
+            <div class="flex flex-col items-center gap-2 cursor-pointer group">
+                <div class="w-[50px] h-[50px] rounded-full bg-[#1c1c1c] flex items-center justify-center text-[#22c55e] transition group-hover:scale-105">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                </div>
+                <p class="text-[11px] text-gray-300 text-center leading-tight">Reverse<br>transaction</p>
             </div>
         </div>
 
         <!-- Done / Save Button -->
-        <div class="px-4 mt-6 mb-2">
-            <button id="mainActionBtn" onclick="handleMainAction()" class="w-full bg-[#22c55e] text-white font-medium py-3.5 rounded-xl hover:bg-green-500 transition-colors">
+        <div class="px-4 mt-8 mb-2">
+            <button id="mainActionBtn" onclick="handleMainAction()" class="w-full bg-[#22c55e] text-white font-medium py-4 rounded-xl hover:bg-green-500 transition-colors text-[16px]">
                 Done
             </button>
         </div>
@@ -296,7 +308,7 @@
                 }
                 updateAvatarUI(data.name, data.avatar);
             } else {
-                updateAvatarUI("REUBEN GACHUKIA", "");
+                updateAvatarUI("Allan Kungu", "");
             }
         };
 
@@ -307,6 +319,7 @@
             const mainBtn = document.getElementById('mainActionBtn');
             const avatarInputContainer = document.getElementById('avatar-input-container');
             const typeContainer = document.getElementById('transaction-type-container');
+            const idContainer = document.getElementById('text-id-container');
 
             if (isEditing) {
                 mainBtn.innerText = "Save Changes";
@@ -322,6 +335,7 @@
                 
                 avatarInputContainer.classList.remove('hidden');
                 typeContainer.classList.remove('hidden');
+                idContainer.classList.add('hidden'); // Hide the green pill ID
 
                 textElements.forEach(id => document.getElementById(id).classList.add('hidden'));
                 inputElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
@@ -353,6 +367,7 @@
 
                 avatarInputContainer.classList.add('hidden');
                 typeContainer.classList.add('hidden');
+                idContainer.classList.remove('hidden'); // Show the green pill ID again
                 inputElements.forEach(id => document.getElementById(id).classList.add('hidden'));
                 textElements.forEach(id => document.getElementById(id).classList.remove('hidden'));
             }
@@ -362,7 +377,7 @@
             if (isEditing) {
                 toggleEdit(); 
             } else {
-                alert("Transaction completed! (You can redirect the user to the home page here)");
+                alert("Transaction completed!");
             }
         }
 
@@ -385,7 +400,7 @@
             downloadText.innerHTML = "Loading...";
 
             html2canvas(receiptElement, {
-                backgroundColor: '#0a0a0a', 
+                backgroundColor: '#0d0d0d', 
                 scale: 2, 
                 useCORS: true, 
                 logging: false
