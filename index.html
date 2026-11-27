@@ -45,9 +45,13 @@
         <!-- THE FLOATING RECEIPT CARD WRAPPER -->
         <div class="mx-4 mt-8 relative z-10">
             
-            <!-- FLOATING EMOJI (No circle, no ring, just floating) -->
-            <div class="absolute -top-16 left-1/2 -translate-x-1/2 z-20">
-                <span class="text-[95px] leading-none drop-shadow-[0_10px_15px_rgba(0,0,0,0.9)] block">🎉</span>
+            <!-- FLOATING EMOJI ON DARK CIRCLE (No gradient ring) -->
+            <div class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 flex items-center justify-center z-20">
+                <!-- The Dark Circle Background -->
+                <div class="absolute inset-0 bg-[#1c1c1c] rounded-full border border-gray-700/50 flex items-center justify-center overflow-hidden shadow-lg">
+                    <!-- The HUGE Emoji -->
+                    <span class="text-[85px] leading-none drop-shadow-xl translate-y-1">🎉</span>
+                </div>
             </div>
 
             <!-- The exact dark card -->
