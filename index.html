@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Receipt Tester</title>
+    <link rel="manifest" href="/receipt-app/manifest.json">
     
     <!-- TAGS TO REMOVE SAFARI SEARCH BAR -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -414,5 +415,14 @@
             });
         }
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/receipt-app/service-worker.js')
+        .then(reg => console.log('Service Worker registered!', reg))
+        .catch(err => console.log('Service Worker failed:', err));
+    });
+  }
+</script>
 </body>
 </html>
